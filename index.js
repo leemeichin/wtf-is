@@ -26,20 +26,12 @@ module.exports = botBuilder(function (res, apiReq) {
     token: apiReq.env.githubToken
   })
 
-  return Promise.all(
-    [
-      gh.repos.get({
-        owner: owner,
-        repo: name
-      }),
-      gh.repos.getReadme({
-        owner: owner,
-        repo: name,
-        headers: {
-          'Accept': 'application/vnd.github.v3.raw'
-        }
-      })
-    ])
+  return Promise.all([
+    gh.repos.get({
+      owner: owner,
+      repo: name
+    })
+  ])
     .then(function (res) {
       var repo = res[0]
       var readme = res[1]

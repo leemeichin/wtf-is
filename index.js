@@ -11,10 +11,12 @@ var gh = new GithubApi({
   }
 })
 
-module.exports = botBuilder(function (name, apiReq) {
+module.exports = botBuilder(function (res, apiReq) {
+  var name = res.text
+
   gh.authenticate({
     type: 'token',
-    token: env.GITHUB_TOKEN
+    token: apiReq.env.githubToken
   })
 
   return Promise.all(

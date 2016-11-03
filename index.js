@@ -12,7 +12,14 @@ var gh = new GithubApi({
 })
 
 module.exports = botBuilder(function (res, apiReq) {
-  var name = res.text
+  var repo = res.text.split('/')
+  var name = repo[0]
+  var owner = apiReq.env.githubOrg
+
+  if (repo.length === 2) {
+    owner = repo[0]
+    name = repo[1]
+  }
 
   gh.authenticate({
     type: 'token',
@@ -22,14 +29,14 @@ module.exports = botBuilder(function (res, apiReq) {
   return Promise.all(
     [
       gh.repos.get({
-        owner: 'typeform',
+        owner: owner,
         repo: name
       }),
       gh.repos.getReadme({
-        owner: 'typeform',
+        owner: owner,
         repo: name,
         headers: {
-          'Accept': 'application/vnd.github.VERSION.raw'
+          'Accept': 'application/vnd.github.v3.raw'
         }
       })
     ])
@@ -40,16 +47,12 @@ module.exports = botBuilder(function (res, apiReq) {
       var msg = [
         '*' + repo.name + '*',
         '_' + repo.description + '_',
-        repo.html_url,
-        '```',
-        readme.content,
-        '```',
-        ':yeah:'
+        repo.html_url
       ]
 
       return msg.join('\n')
     })
     .catch(function (err) {
-      return err + ':sadpanda: :facepalm:'
+      return err.message
     })
 })

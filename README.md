@@ -17,11 +17,15 @@ It's a small service that, when connected to Slack or your chat platform of choi
 > *zozzfozzle-encoder*
 > _Encodes Zozzfozzles in a variety of formats, such as PowerPoint, CSV and PNG._
 > https://github.com/zozzfozzle/zozzfozzle-encoder
->
-> ```
-> # Zozzfozzle Encoder
-> ... more readme stuff
-> ```
+
+
+You can also use this to find info for any *other* repo at a glance, like so:
+
+```
+/wtfi facebook/react
+```
+
+
 
 ### Installation
 
@@ -33,3 +37,8 @@ You will also need to add two *`stage variables`* to your lambda function:
 
 - `githubToken` - this is a user token that has access to you or your org's private repos
 - `githubOrg` - your own username or that of your org, which is how the bot knows where to look for your services.
+
+
+### Nice to Have
+
+- Support GitLab and Bitbucket

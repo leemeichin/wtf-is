@@ -14,7 +14,7 @@ It's a small service that, when connected to Slack or your chat platform of choi
 /wtfi zozzfozzle-encoder
 ```
 
-> *zozzfozzle-encoder*
+> **zozzfozzle-encoder**
 >
 > _Encodes Zozzfozzles in a variety of formats, such as PowerPoint, CSV and PNG._
 >
@@ -35,7 +35,7 @@ You'll need an AWS account so you can start making lambda functions. The documen
 
 Once you've installed that, you'll have to go to Slack or Telegram or whatever platform is supported to connect things up.
 
-You will also need to add two *`stage variables`* to your lambda function:
+You will also need to add two **`stage variables`** to your lambda function:
 
 - `githubToken` - this is a user token that has access to you or your org's private repos
 - `githubOrg` - your own username or that of your org, which is how the bot knows where to look for your services.

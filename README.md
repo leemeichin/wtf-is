@@ -25,7 +25,7 @@ You can also use this to find info for any *other* repo at a glance, like so:
 /wtfi facebook/react
 ```
 
-
+![What it looks like in Slack](example.png)
 
 ### Installation
 

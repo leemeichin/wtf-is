@@ -5,6 +5,7 @@
   "author": "Lee Machin <lee@typeform.com>",
   "license": "MIT",
   "dependencies": {
+    "aws-sdk": "^2.6.14",
     "claudia-bot-builder": "^2.4.0",
     "github": "^6.0.1"
   },

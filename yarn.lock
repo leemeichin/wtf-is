@@ -34,7 +34,7 @@ async@~1.5.0:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
 
-aws-sdk@^2.5.3:
+aws-sdk, aws-sdk@^2.5.3:
   version "2.6.14"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.6.14.tgz#6775f059b9d5baef8998fe7456ef5d7aae858b65"
   dependencies:

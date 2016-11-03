@@ -1,0 +1,11 @@
+{
+  "lambda": {
+    "role": "github-repo-search-executor",
+    "name": "github-repo-search",
+    "region": "us-east-1"
+  },
+  "api": {
+    "id": "m2tmghe98g",
+    "module": "index"
+  }
+}

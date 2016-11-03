@@ -38,11 +38,11 @@ module.exports = botBuilder(function (res, apiReq) {
       var readme = res[1]
 
       var msg = [
-        repo.name,
-        repo.description,
+        '*' + repo.name + '*',
+        '_' + repo.description + '_',
         repo.html_url,
         '```',
-        readme,
+        readme.content,
         '```',
         ':yeah:'
       ]

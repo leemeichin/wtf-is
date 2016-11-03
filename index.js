@@ -33,7 +33,10 @@ module.exports = botBuilder(function (res, apiReq) {
         }
       })
     ])
-    .then(function (repo, readme) {
+    .then(function (res) {
+      var repo = res[0]
+      var readme = res[1]
+
       var msg = [
         repo.name,
         repo.description,

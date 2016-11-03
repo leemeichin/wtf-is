@@ -1,0 +1,14 @@
+{
+  "name": "github-repo-search",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Lee Machin <lee@typeform.com>",
+  "license": "MIT",
+  "dependencies": {
+    "claudia-bot-builder": "^2.4.0",
+    "github": "^6.0.1"
+  },
+  "devDependencies": {
+    "claudia": "^2.1.1"
+  }
+}

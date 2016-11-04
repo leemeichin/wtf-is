@@ -1,7 +1,12 @@
 var botBuilder = require('claudia-bot-builder')
 var GithubApi = require('github')
 
-var env = require('process').env
+var symbols = {
+  pending: ':white_circle:',
+  success: ':white_check_mark:',
+  error: ':boom:',
+  failure: ':red_circle:'
+}
 
 var gh = new GithubApi({
   protocol: 'https',
@@ -10,6 +15,14 @@ var gh = new GithubApi({
     'user-agent': 'github-repo-search-slack'
   }
 })
+
+
+// Allow build status symbols to be customised
+function symbolFor (env, status) {
+  var envStatus = 'symbol_' + status
+
+  return env[envStatus] || symbols[status]
+}
 
 module.exports = botBuilder(function (res, apiReq) {
   var repo = res.text.split('/')
@@ -30,16 +43,23 @@ module.exports = botBuilder(function (res, apiReq) {
     gh.repos.get({
       owner: owner,
       repo: name
+    }),
+    gh.repos.getCombinedStatus({
+      owner: owner,
+      repo: name,
+      ref: 'heads/master'
     })
   ])
     .then(function (res) {
       var repo = res[0]
-      var readme = res[1]
-
+      var combinedStatus = res[1]
+      var state = combinedStatus.state + ' ' + symbolFor(apiReq.env, combinedStatus.state)
       var msg = [
         '*' + repo.name + '*',
         '_' + repo.description + '_',
-        repo.html_url
+        repo.html_url,
+        '',
+        'Build status: ' + state
       ]
 
       return msg.join('\n')

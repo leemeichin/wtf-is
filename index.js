@@ -48,8 +48,6 @@ module.exports = botBuilder(function (res, apiReq) {
     )
   }
 
-  console.log(requests)
-
   return Promise.all(requests)
     .then(function (res) {
       var repo = res[0]
@@ -79,7 +77,6 @@ module.exports = botBuilder(function (res, apiReq) {
         )
       }
 
-      console.log(findMetaYaml, msg)
       return new slackTemplate(msg.join('\n')).channelMessage(true).get()
     })
     .catch(function (err) {

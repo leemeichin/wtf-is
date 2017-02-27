@@ -1,28 +1,18 @@
 var botBuilder = require('claudia-bot-builder')
 var GithubApi = require('github')
+var yaml = require('js-yaml')
 
-var symbols = {
-  pending: ':white_circle:',
-  success: ':white_check_mark:',
-  error: ':boom:',
-  failure: ':red_circle:'
-}
+var slackTemplate = botBuilder.slackTemplate
 
 var gh = new GithubApi({
   protocol: 'https',
   host: 'api.github.com',
   headers: {
-    'user-agent': 'github-repo-search-slack'
+    'user-agent': 'leemachin/wtf-is (slack)'
   }
 })
 
-
-// Allow build status symbols to be customised
-function symbolFor (env, status) {
-  var envStatus = 'symbol_' + status
-
-  return env[envStatus] || symbols[status]
-}
+var separator = '\n------\n'
 
 module.exports = botBuilder(function (res, apiReq) {
   var repo = res.text.split('/')
@@ -44,25 +34,33 @@ module.exports = botBuilder(function (res, apiReq) {
       owner: owner,
       repo: name
     }),
-    gh.repos.getCombinedStatus({
+    gh.repos.getContent({
       owner: owner,
       repo: name,
-      ref: 'heads/master'
+      path: '.typeform.yml',
+      headers: {
+        Accept: 'application/vnd.github.v3.raw'
+      }
     })
   ])
     .then(function (res) {
       var repo = res[0]
-      var combinedStatus = res[1]
-      var state = combinedStatus.state + ' ' + symbolFor(apiReq.env, combinedStatus.state)
-      var msg = [
-        '*' + repo.name + '*',
-        '_' + repo.description + '_',
-        repo.html_url,
-        '',
-        'Build status: ' + state
-      ]
+      var meta = yaml.safeLoad(res[1].content)
 
-      return msg.join('\n')
+      return new slackTemplate([
+        '*' + (meta.name || repo.name) + '*',
+        '_' + (meta.description || repo.description) + '_',
+        meta.service_url + ' | ' + repo.html_url,
+        'Owners: ' + meta.owners + ' (' + meta.slack_channel + ')',
+        separator,
+        'CI: ' + meta.ci_url,
+        'Jenkins: ' + meta.jenkins_view_url,
+        separator,
+        'Docs:',
+        meta.docs.join('\n'),
+        separator,
+        meta.dependencies.join('\n')
+      ].join('\n')).channelMessage(true).get()
     })
     .catch(function (err) {
       return err.message

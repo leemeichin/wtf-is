@@ -15,6 +15,12 @@ var gh = new GithubApi({
 var separator = '\n------\n'
 
 module.exports = botBuilder(function (res, apiReq) {
+  if (res.text === 'caio') {
+    return new slackTemplate('@caio http://i.giphy.com/U3POwAL4KLDbi.gif :yeah:')
+      .channelMessage(true)
+      .get()
+  }
+
   var repo = res.text.split('/')
   var name = repo[0]
   var owner = process.env.GITHUB_ORG

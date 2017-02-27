@@ -55,7 +55,7 @@ module.exports = botBuilder(function (res, apiReq) {
       var msg = []
 
       if (findMetaYaml) {
-        var meta = yaml.safeLoad(res[1].content)
+        var meta = yaml.safeLoad(res[1].content.data)
 
         msg.push(
           meta.service_url + ' | ' + repo.html_url,

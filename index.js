@@ -17,7 +17,7 @@ var separator = '\n------\n'
 module.exports = botBuilder(function (res, apiReq) {
   var repo = res.text.split('/')
   var name = repo[0]
-  var owner = apiReq.env.githubOrg
+  var owner = process.env.GITHUB_ORG
   var findMetaYaml = true
 
   if (repo.length === 2) {
@@ -28,7 +28,7 @@ module.exports = botBuilder(function (res, apiReq) {
 
   gh.authenticate({
     type: 'token',
-    token: apiReq.env.githubToken
+    token: process.env.GITHUB_TOKEN
   })
 
   var requests = [

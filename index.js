@@ -1,68 +1,84 @@
 var botBuilder = require('claudia-bot-builder')
 var GithubApi = require('github')
+var yaml = require('js-yaml')
 
-var symbols = {
-  pending: ':white_circle:',
-  success: ':white_check_mark:',
-  error: ':boom:',
-  failure: ':red_circle:'
-}
+var slackTemplate = botBuilder.slackTemplate
 
 var gh = new GithubApi({
   protocol: 'https',
   host: 'api.github.com',
   headers: {
-    'user-agent': 'github-repo-search-slack'
+    'user-agent': 'leemachin/wtf-is (slack)'
   }
 })
 
-
-// Allow build status symbols to be customised
-function symbolFor (env, status) {
-  var envStatus = 'symbol_' + status
-
-  return env[envStatus] || symbols[status]
-}
+var separator = '\n------\n'
 
 module.exports = botBuilder(function (res, apiReq) {
   var repo = res.text.split('/')
   var name = repo[0]
-  var owner = apiReq.env.githubOrg
+  var owner = process.env.GITHUB_ORG
+  var findMetaYaml = true
 
   if (repo.length === 2) {
     owner = repo[0]
     name = repo[1]
+    findMetaYaml = false
   }
 
   gh.authenticate({
     type: 'token',
-    token: apiReq.env.githubToken
+    token: process.env.GITHUB_TOKEN
   })
 
-  return Promise.all([
-    gh.repos.get({
-      owner: owner,
-      repo: name
-    }),
-    gh.repos.getCombinedStatus({
-      owner: owner,
-      repo: name,
-      ref: 'heads/master'
-    })
-  ])
+  var requests = [
+    gh.repos.get({owner: owner, repo: name})
+  ]
+
+  if (findMetaYaml) {
+    requests.push(
+      gh.repos.getContent({
+        owner: owner,
+        repo: name,
+        path: '.typeform.yml',
+        headers: {
+          Accept: 'application/vnd.github.v3.raw'
+        }
+      })
+    )
+  }
+
+  return Promise.all(requests)
     .then(function (res) {
       var repo = res[0]
-      var combinedStatus = res[1]
-      var state = combinedStatus.state + ' ' + symbolFor(apiReq.env, combinedStatus.state)
-      var msg = [
-        '*' + repo.name + '*',
-        '_' + repo.description + '_',
-        repo.html_url,
-        '',
-        'Build status: ' + state
-      ]
 
-      return msg.join('\n')
+      var msg = []
+
+      if (findMetaYaml) {
+        var meta = yaml.safeLoad(res[1].data)
+
+        msg.push(
+          meta.service_url + ' | ' + repo.html_url,
+          'Team: ' + meta.team.name + ' (' + meta.team.slack_channel + ') :yeah:',
+          separator,
+          'CI: ' + meta.ci_url,
+          'Deploy: ' + meta.deploy_url,
+          separator,
+          'Docs:',
+          meta.docs.join('\n'),
+          separator,
+          'Dependencies:',
+          meta.dependencies.join('\n')
+        )
+      } else {
+        msg.push(
+          '*' + repo.name + '*',
+          '_' + repo.description + '_',
+          repo.html_url
+        )
+      }
+
+      return new slackTemplate(msg.join('\n')).channelMessage(true).get()
     })
     .catch(function (err) {
       return err.message

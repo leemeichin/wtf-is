@@ -68,14 +68,24 @@ module.exports = botBuilder(function (res, apiReq) {
           'Team: ' + meta.team.name + ' (' + meta.team.slack_channel + ') :yeah:',
           separator,
           'CI: ' + meta.ci_url,
-          'Deploy: ' + meta.deploy_url,
-          separator,
-          'Docs:',
-          meta.docs.join('\n'),
-          separator,
-          'Dependencies:',
-          meta.dependencies.join('\n')
+          'Deploy: ' + meta.deploy_url
         )
+
+        if (meta.docs) {
+          msg.push(
+            separator,
+            'Docs:',
+            meta.docs.join('\n')
+          )
+        }
+
+        if (meta.dependencies) {
+          msg.push(
+            separator,
+            'Dependencies:',
+            meta.dependencies.join('\n')
+          )
+        }
       } else {
         msg.push(
           '*' + repo.name + '*',

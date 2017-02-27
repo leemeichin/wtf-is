@@ -59,7 +59,7 @@ module.exports = botBuilder(function (res, apiReq) {
 
         msg.push(
           meta.service_url + ' | ' + repo.html_url,
-          'Team: ' + meta.team.name + ' (' + meta.team.slack_channel + ')',
+          'Team: ' + meta.team.name + ' (' + meta.team.slack_channel + ') :yeah:',
           separator,
           'CI: ' + meta.ci_url,
           'Deploy: ' + meta.deploy_url,

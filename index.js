@@ -18,10 +18,12 @@ module.exports = botBuilder(function (res, apiReq) {
   var repo = res.text.split('/')
   var name = repo[0]
   var owner = apiReq.env.githubOrg
+  var findMetaYaml = true
 
   if (repo.length === 2) {
     owner = repo[0]
     name = repo[1]
+    findMetaYaml = false
   }
 
   gh.authenticate({
@@ -29,38 +31,52 @@ module.exports = botBuilder(function (res, apiReq) {
     token: apiReq.env.githubToken
   })
 
-  return Promise.all([
-    gh.repos.get({
-      owner: owner,
-      repo: name
-    }),
-    gh.repos.getContent({
-      owner: owner,
-      repo: name,
-      path: '.typeform.yml',
-      headers: {
-        Accept: 'application/vnd.github.v3.raw'
-      }
-    })
-  ])
+  var requests = [
+    gh.repos.get({owner: owner, repo: name})
+  ]
+
+  if (findMetaYaml) {
+    requests.push(
+      gh.repos.getContent({
+        owner: owner,
+        repo: name,
+        path: '.typeform.yml',
+        headers: {
+          Accept: 'application/vnd.github.v3.raw'
+        }
+      })
+    )
+  }
+
+  return Promise.all(requests)
     .then(function (res) {
       var repo = res[0]
-      var meta = yaml.safeLoad(res[1].content)
 
-      return new slackTemplate([
-        '*' + (meta.name || repo.name) + '*',
-        '_' + (meta.description || repo.description) + '_',
-        meta.service_url + ' | ' + repo.html_url,
-        'Team: ' + meta.team.name + ' (' + meta.team.slack_channel + ')',
-        separator,
-        'CI: ' + meta.ci_url,
-        'Deploy: ' + meta.deploy_url,
-        separator,
-        'Docs:',
-        meta.docs.join('\n'),
-        separator,
-        meta.dependencies.join('\n')
-      ].join('\n')).channelMessage(true).get()
+      var msg = []
+
+      if (findMetaYaml) {
+        var meta = yaml.safeLoad(res[1].content)
+        msg.concat([
+          meta.service_url + ' | ' + repo.html_url,
+          'Team: ' + meta.team.name + ' (' + meta.team.slack_channel + ')',
+          separator,
+          'CI: ' + meta.ci_url,
+          'Deploy: ' + meta.deploy_url,
+          separator,
+          'Docs:',
+          meta.docs.join('\n'),
+          separator,
+          meta.dependencies.join('\n')
+        ])
+      } else {
+        msg.concat([
+          '*' + repo.name + '*',
+          '_' + repo.description + '_',
+          repo.html_url
+        ])
+      }
+
+      return new slackTemplate(msg.join('\n')).channelMessage(true).get()
     })
     .catch(function (err) {
       return err.message

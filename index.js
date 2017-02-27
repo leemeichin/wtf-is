@@ -48,6 +48,8 @@ module.exports = botBuilder(function (res, apiReq) {
     )
   }
 
+  console.log(requests)
+
   return Promise.all(requests)
     .then(function (res) {
       var repo = res[0]
@@ -56,7 +58,8 @@ module.exports = botBuilder(function (res, apiReq) {
 
       if (findMetaYaml) {
         var meta = yaml.safeLoad(res[1].content)
-        msg.concat([
+
+        msg.push(
           meta.service_url + ' | ' + repo.html_url,
           'Team: ' + meta.team.name + ' (' + meta.team.slack_channel + ')',
           separator,
@@ -67,15 +70,16 @@ module.exports = botBuilder(function (res, apiReq) {
           meta.docs.join('\n'),
           separator,
           meta.dependencies.join('\n')
-        ])
+        )
       } else {
-        msg.concat([
+        msg.push(
           '*' + repo.name + '*',
           '_' + repo.description + '_',
           repo.html_url
-        ])
+        )
       }
 
+      console.log(findMetaYaml, msg)
       return new slackTemplate(msg.join('\n')).channelMessage(true).get()
     })
     .catch(function (err) {

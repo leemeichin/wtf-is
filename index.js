@@ -71,7 +71,7 @@ module.exports = botBuilder(function (res, apiReq) {
         )
 
         if (meta.ci_url && meta.deploy_url) {
-          meta.push(
+          msg.push(
             separator,
             'CI: ' + meta.ci_url,
             'Deploy: ' + meta.deploy_url

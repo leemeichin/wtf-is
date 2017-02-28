@@ -46,7 +46,7 @@ module.exports = botBuilder(function (res, apiReq) {
       gh.repos.getContent({
         owner: owner,
         repo: name,
-        path: '.typeform.yml',
+        path: '.' + owner + '.yml',
         headers: {
           Accept: 'application/vnd.github.v3.raw'
         }

@@ -64,11 +64,13 @@ module.exports = botBuilder(function (res, apiReq) {
         var meta = yaml.safeLoad(res[1].data)
 
         msg.push(
+          '*' + meta.name || repo.name + '*',
+          '_' + meta.description || repo.description + '_',
           meta.service_url + ' | ' + repo.html_url,
           'Team: ' + meta.team.name + ' (' + meta.team.slack_channel + ') :yeah:'
         )
 
-        if (meta.ci && meta.deploy) {
+        if (meta.ci_url && meta.deploy_url) {
           meta.push(
             separator,
             'CI: ' + meta.ci_url,

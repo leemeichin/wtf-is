@@ -79,19 +79,26 @@ module.exports = botBuilder(function (res, apiReq) {
         }
 
         if (meta.docs) {
-          msg.push(
-            separator,
-            'Docs:',
-            meta.docs.join('\n')
-          )
+          msg.push(separator, 'Docs:')
+
+          for (var title in docs) {
+            var url = docs[doc]
+
+            if (title[0] == '_') {
+              msg.push(url)
+            } else {
+              msg.push('<' + url + '|' + title + '>')
+            }
+          }
         }
 
         if (meta.dependencies) {
-          msg.push(
-            separator,
-            'Dependencies:',
-            meta.dependencies.join('\n')
-          )
+          msg.push(separator, 'Dependencies:')
+
+          for (var name in dependencies) {
+            var url = dependencies[name]
+            msg.push('<' + url + '|' + name + '>')
+          }
         }
       } else {
         msg.push(

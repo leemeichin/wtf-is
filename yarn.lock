@@ -9,6 +9,13 @@ agent-base@2:
     extend "~3.0.0"
     semver "~5.0.1"
 
+ajv@^4.11.3:
+  version "4.11.3"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-4.11.3.tgz#ce30bdb90d1254f762c75af915fb3a63e7183d22"
+  dependencies:
+    co "^4.6.0"
+    json-stable-stringify "^1.0.1"
+
 archiver-utils@~0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/archiver-utils/-/archiver-utils-0.3.0.tgz#9d85340892fe9e7c6c1b1b6af3c33692cf595b70"
@@ -126,6 +133,10 @@ claudia-bot-builder:
     oh-no-i-insist "^1.0.0"
     souffleur "^1.0.0"
     tsscmp "^1.0.5"
+
+co@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/co/-/co-4.6.0.tgz#6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"
 
 compress-commons@~0.4.0:
   version "0.4.2"
@@ -276,6 +287,16 @@ js-yaml@^3.8.1:
   dependencies:
     argparse "^1.0.7"
     esprima "^3.1.1"
+
+json-stable-stringify@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/json-stable-stringify/-/json-stable-stringify-1.0.1.tgz#9a759d39c5f2ff503fd5300646ed445f88c4f9af"
+  dependencies:
+    jsonify "~0.0.0"
+
+jsonify@~0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/jsonify/-/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
 
 lazystream@~0.1.0:
   version "0.1.0"

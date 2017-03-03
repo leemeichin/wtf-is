@@ -1,6 +1,7 @@
 var botBuilder = require('claudia-bot-builder')
 var GithubApi = require('github')
 var yaml = require('js-yaml')
+var validator = require('ajv')
 
 var slackTemplate = botBuilder.slackTemplate
 
@@ -12,6 +13,63 @@ var gh = new GithubApi({
   }
 })
 
+var schema = {
+  team: {
+    type: 'object',
+    required: true,
+    properties: {
+      name: { type: 'string' },
+      slack_channel: { type: 'string' }
+    }
+  },
+  deploy_url: {
+    type: 'url',
+    required: true
+  },
+  ci_url: {
+    type: 'url',
+    required: true
+  },
+  name: {
+    type: 'string',
+    required: false
+  },
+  description: {
+    type: 'string',
+    required: false
+  },
+  service_url: {
+    type: 'url',
+    required: false
+  },
+  docs: {
+    type: 'object',
+    required: false
+  },
+  dependencies: {
+    type: 'object',
+    required: false
+  },
+  ports: {
+    type: 'object',
+    required: false
+  },
+  infrastructure: {
+    type: 'object',
+    required: false,
+  },
+  aws: {
+    type: 'object',
+    required: false
+
+  },
+  metrics: {
+    type: 'object',
+    required: false
+
+  }
+}
+
 var separator = '\n------\n'
 
 module.exports = botBuilder(function (res, apiReq) {
@@ -19,6 +77,10 @@ module.exports = botBuilder(function (res, apiReq) {
     return new slackTemplate('@caio http://i.giphy.com/U3POwAL4KLDbi.gif :yeah:')
       .channelMessage(true)
       .get()
+  }
+
+  if (/--validate/.test(res.text)) {
+
   }
 
   var repo = res.text.split('/')

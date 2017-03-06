@@ -83,10 +83,6 @@ module.exports = botBuilder(function (res, apiReq) {
       .get()
   }
 
-  if (/--validate/.test(res.text)) {
-
-  }
-
   var repo = res.text.split('/')
   var name = repo[0]
   var owner = process.env.GITHUB_ORG
@@ -96,6 +92,10 @@ module.exports = botBuilder(function (res, apiReq) {
     owner = repo[0]
     name = repo[1]
     findMetaYaml = false
+  }
+
+  if (/--validate/.test(res.text)) {
+
   }
 
   gh.authenticate({

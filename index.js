@@ -43,8 +43,12 @@ var schema = {
     required: false
   },
   docs: {
-    type: 'object',
-    required: false
+    type: 'array',
+    required: false,
+    properties: {
+      title: 'string',
+      url: 'url'
+    }
   },
   dependencies: {
     type: 'object',
@@ -56,7 +60,7 @@ var schema = {
   },
   infrastructure: {
     type: 'object',
-    required: false,
+    required: false
   },
   aws: {
     type: 'object',
@@ -143,23 +147,20 @@ module.exports = botBuilder(function (res, apiReq) {
         if (meta.docs) {
           msg.push(separator, 'Docs:')
 
-          for (var title in docs) {
-            var url = docs[doc]
-
-            if (title[0] == '_') {
-              msg.push(url)
+          docs.forEach(function (doc) {
+            if (doc.title) {
+              msg.push('<' + doc.url + '|' + doc.title + '>')
             } else {
-              msg.push('<' + url + '|' + title + '>')
+              msg.push(doc.url)
             }
-          }
+          })
         }
 
         if (meta.dependencies) {
           msg.push(separator, 'Dependencies:')
 
-          for (var name in dependencies) {
-            var url = dependencies[name]
-            msg.push('<' + url + '|' + name + '>')
+          for (var dep in dependencies) {
+            msg.push('<' + dep.url + '|' + dep.name + '>')
           }
         }
       } else {

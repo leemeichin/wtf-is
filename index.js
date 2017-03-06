@@ -46,8 +46,8 @@ var schema = {
     type: 'array',
     required: false,
     properties: {
-      title: 'string',
-      url: 'url'
+      title: { type: 'string', required: false },
+      url: { type: 'url' }
     }
   },
   dependencies: {

@@ -52,7 +52,11 @@ var schema = {
   },
   dependencies: {
     type: 'object',
-    required: false
+    required: false,
+    properties: {
+      name: { type: 'string' },
+      url: { type: 'url' }
+    }
   },
   ports: {
     type: 'object',

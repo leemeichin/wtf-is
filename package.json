@@ -1,17 +1,29 @@
 {
   "name": "github-repo-search",
   "version": "1.0.0",
-  "main": "index.js",
-  "author": "Lee Machin <lee@typeform.com>",
+  "main": "lib/bot.js",
+  "author": "Lee Machin <me@mrl.ee>",
   "license": "MIT",
+  "files": [
+    "lib/"
+  ],
+  "scripts": {
+    "build": "babel src -d lib",
+    "create": "claudia create --profile claudia --api-module lib/bot",
+    "update": "clauda update --profile claudia --version live"
+  },
   "dependencies": {
     "ajv": "^4.11.3",
     "aws-sdk": "^2.6.14",
+    "babel-cli": "^6.23.0",
+    "babel-eslint": "^7.1.1",
+    "babel-preset-es2016": "^6.22.0",
+    "babel-preset-es2017": "^6.22.0",
+    "claudia": "^2.1.1",
     "claudia-bot-builder": "^2.4.0",
+    "eslint": "^3.17.1",
     "github": "^6.0.1",
-    "js-yaml": "^3.8.1"
-  },
-  "devDependencies": {
-    "claudia": "^2.1.1"
+    "js-yaml": "^3.8.1",
+    "standard": "^9.0.0"
   }
 }

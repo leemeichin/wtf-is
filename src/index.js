@@ -2,6 +2,7 @@ import botBuilder from 'claudia-bot-builder'
 import GithubApi from 'github'
 import yaml from 'js-yaml'
 import Format from './format'
+import cmd, {validate, create} from './cmd'
 
 const SlackTemplate = botBuilder.slackTemplate
 
@@ -49,10 +50,19 @@ export default botBuilder(async (req, ctx) => {
 
   gh.authenticate({type: 'token', token: process.env.GITHUB_TOKEN})
 
+  if (cmd.mustValidate(req.text)) {
+    return validate(metadata)
+  }
+
+  if (cmd.mustCreate(req.text)) {
+    return create(gh)
+  }
+
   try {
     const repo = await getRepoInfo
     const metadata = await getRepoMetadata(owner, name)
     const format = new Format(repo, metadata)
+
 
     let msg = [
       format.name(),

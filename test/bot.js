@@ -3,8 +3,16 @@ import context from 'aws-lambda-mock-context'
 import sinon from 'sinon'
 import chai, {assert} from 'chai'
 import chaiAsPromised from 'chai-as-promised'
+import {readFileSync} from 'fs'
 
 chai.use(chaiAsPromised)
+
+const schema = readFileSync(`${__dirname}/../metadata.reference.yml`)
+
+function fixture (name) {
+  const json = path.resolve(__dirname, name + '.json')
+  return JSON.parse(readFileSync(json))
+}
 
 describe('Validating a metadata file against the schema', () => {
   it('should explain the errors when the file does not match the spec', () => {

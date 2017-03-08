@@ -1,4 +1,4 @@
-var validator = require('ajv')
+import ajv from 'ajv'
 
 
 var schema = {
@@ -67,6 +67,7 @@ var schema = {
 }
 
 
-module.exports = function (payload) {
-
+export default function validate (metadata) {
+  const valid = ajv.validate(schema, metadata)
+  return valid || ajv.errors
 }

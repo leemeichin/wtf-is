@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 import botBuilder from 'claudia-bot-builder'
 import GithubApi from 'github'
 import yaml from 'js-yaml'
@@ -86,7 +87,6 @@ export class WtfIs {
   async _repoInfo () {
     return gh.repos.get({repo, name})
   }
-
 }
 
-export default botBuilder(new WtfIs().slackBot
+export default botBuilder(new WtfIs().slackBot)

@@ -37,7 +37,7 @@ export default class Format {
     if (ci_url && deploy_url) {
       return [`CI: ${ci_url}`, `Deploy: ${deploy_url}`].join('\n')
     }
-  },
+  }
 
   docs () {
     const {docs} = this.metadata.docs

@@ -1,0 +1,26 @@
+# This is a reference implementation of a complete `.$YOUR_ORG.yml` file. Use it as an example for your own repository.
+#
+# Fields are either [REQUIRED] or [OPTIONAL]. It may be the case that a field that is [OPTIONAL], when used, has some [REQUIRED] attributes.
+#
+# Validate your `.typeform.yml` by running `/wtfi my-repo --validate`.
+---
+name: 'awesome-service' # [OPTIONAL] An alternative name or nickname for this service; defaults to GitHub name
+description: 'My awesome microservice' # [OPTIONAL] An alternative description; defaults to GitHub description
+
+team: # [REQUIRED] The team who is _primarily_ responsible for maintaining the service
+  name: 'engineering' # [REQUIRED] The name of the team, or 'engineering' or 'dev' if hard to define single owner
+  slack_channel: '#dev' # [REQUIRED] The slack channel for the team
+  room_mention: '@here' # [OPTIONAL] The handle to address the actual team and not all subscribers to the channel
+
+docs: # [OPTIONAL] A list of links to places useful documentation can be found
+  - title: 'Stack Overflow' # [OPTIONAL] Optional replacement text for URL, reverts to raw URL if ommitted
+    url: 'http://stackoverflow.com' # [REQUIRED] The URL where the documentation lives
+
+dependencies: # [OPTIONAL] A list of services that this one depends on
+  - name: 'ask_awesomely' # [REQUIRED] The name of the service as defined in its own .typeform.yml, or as defined on GitHub
+    url: 'https://github.com/leemachin/ask_awesomely' # [REQUIRED] The URL to the repo
+
+service_url: 'https://stackblown.com' # [OPTIONAL] The URL if accessible through a browser
+
+ci_url: 'https://travis-ci.com/leemachin/pupper' # [REQUIRED] The URL for whatever CI service is being used (Jenkins/Travis)
+deploy_url: 'https://quay.io/some/repo' # [REQUIRED] The URL for whatever deploy service is being used (Quay/Jenkins)

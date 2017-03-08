@@ -1,6 +1,6 @@
 {
-  "name": "github-repo-search",
-  "version": "1.0.0",
+  "name": "wtf-is",
+  "version": "2.0.0",
   "main": "lib/bot.js",
   "author": "Lee Machin <me@mrl.ee>",
   "license": "MIT",

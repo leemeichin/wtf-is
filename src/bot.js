@@ -39,8 +39,8 @@ export default class Bot {
         return this.performCreation(owner, name)
       }
 
-      const repo = await getRepoInfo
-      const metadata = await getRepoMetadata(owner, name)
+      const repo = await this.repoInfo()
+      const metadata = await this.repoMetadata(owner, name)
 
       if (cmd.mustValidate(req.text)) {
         return this.performValidation(metadata)
@@ -71,7 +71,7 @@ export default class Bot {
     ].compact().join('\n')
   }
 
-  async _repoMetadata () {
+  async repoMetadata (owner, name) {
     let metadata = await this.gh.repos.getContent({
       owner,
       repo,
@@ -84,7 +84,7 @@ export default class Bot {
     return yaml.safeLoad(metadata.data)
   }
 
-  async _repoInfo () {
+  async repoInfo () {
     return this.gh.repos.get({repo, name})
   }
 

@@ -27,10 +27,12 @@ export default class Format {
   }
 
   siteUrls () {
-    if (this.metadata.service_url) {
+    if (this.metadata && this.metadata.service_url) {
       return `${this.metadata.service_url} | ${this.repo.html_url}`
+    } else if (this.repo.homepage) {
+      return `${this.repo.homepage} | ${this.repo.html_url}`
     } else {
-      return this.repo.html_url
+      return `${this.repo.html_url}`
     }
   }
 

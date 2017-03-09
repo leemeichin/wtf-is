@@ -37,6 +37,7 @@ export default class Bot {
 
     try {
       this.repoInfo = await this.getRepoInfo()
+      console.log(this.repoInfo)
     } catch (err) {
       if (err.code == 404) {
         return this.hiddenMessage("Woops, that repo doesn't exist!")
@@ -49,6 +50,7 @@ export default class Bot {
       this.metadata = await this.getRepoMetadata()
     } catch (err) {
       if (err.code == 404) {
+        console.log(this.repoInfo)
         const msg = this.buildBasicMessage()
         return this.channelMessage(msg).get()
       } else {
@@ -92,7 +94,8 @@ export default class Bot {
 
     return [
       formatter.repoName(),
-      formatter.repoDescription()
+      formatter.repoDescription(),
+      formatter.siteUrls()
     ].join('\n')
   }
 
@@ -110,7 +113,7 @@ export default class Bot {
   }
 
   async getRepoInfo () {
-    const repoInfo = this.gh.repos.get({owner: this.owner, repo: this.repo})
+    const repoInfo = await this.gh.repos.get({owner: this.owner, repo: this.repo})
     return repoInfo.data
   }
 

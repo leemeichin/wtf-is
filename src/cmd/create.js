@@ -1,3 +1,5 @@
+import 'babel-polyfill'
+
 import {readFile} from 'mz/fs'
 import {resolve} from 'path'
 

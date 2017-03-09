@@ -1,0 +1,12 @@
+name: 'wtf-is'
+description: 'Slack bot to get more information about a microservice on Github'
+
+team:
+  name: 'leemachin'
+  slack_channel: '#probably-shouldnt-be-required'
+
+docs:
+  - { title: 'README', url: 'http://stackoverflow.com' }
+
+ci_url: 'https://travis-ci.com/leemachin/wtf-is'
+deploy_url: 'https://github.com/leemachin/wtf-is'

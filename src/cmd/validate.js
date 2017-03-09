@@ -1,73 +1,59 @@
-import ajv from 'ajv'
+import Ajv from 'ajv'
 
-
-var schema = {
-  team: {
-    type: 'object',
-    required: true,
-    properties: {
-      name: { type: 'string' },
-      slack_channel: { type: 'string' }
+const schema = {
+  properties: {
+    name: { type: 'string' },
+    description: { type: 'string' },
+    deploy_url: { type: 'string', format: 'uri' },
+    ci_url: { type: 'string', format: 'uri' },
+    service_url: { type: 'string', format: 'uri' },
+    team: {
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        slack_channel: { type: 'string' }
+      }
+    },
+    docs: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          title: { type: 'string' },
+          url: { type: 'string', format: 'uri' }
+        },
+        required: ['url']
+      }
+    },
+    dependencies: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          name: { type: 'string' },
+          url: { type: 'string', format: 'uri' }
+        }
+      },
+      required: ['name', 'url']
+    },
+    ports: {
+      type: 'object'
+    },
+    infrastructure: {
+      type: 'object'
+    },
+    aws: {
+      type: 'object'
+    },
+    metrics: {
+      type: 'object'
     }
   },
-  deploy_url: {
-    type: 'url',
-    required: true
-  },
-  ci_url: {
-    type: 'url',
-    required: true
-  },
-  name: {
-    type: 'string',
-    required: false
-  },
-  description: {
-    type: 'string',
-    required: false
-  },
-  service_url: {
-    type: 'url',
-    required: false
-  },
-  docs: {
-    type: 'array',
-    required: false,
-    properties: {
-      title: { type: 'string', required: false },
-      url: { type: 'url' }
-    }
-  },
-  dependencies: {
-    type: 'object',
-    required: false,
-    properties: {
-      name: { type: 'string' },
-      url: { type: 'url' }
-    }
-  },
-  ports: {
-    type: 'object',
-    required: false
-  },
-  infrastructure: {
-    type: 'object',
-    required: false
-  },
-  aws: {
-    type: 'object',
-    required: false
-
-  },
-  metrics: {
-    type: 'object',
-    required: false
-
-  }
+  required: ['team', 'deploy_url', 'ci_url']
 }
 
 
 export default function validate (metadata) {
-  const valid = ajv.validate(schema, metadata)
-  return valid || ajv.errors
+  const ajv = new Ajv({allErrors: true})
+  return ajv.validate(schema, metadata) || ajv.errors
 }

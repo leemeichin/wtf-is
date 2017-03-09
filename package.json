@@ -1,7 +1,7 @@
 {
   "name": "wtf-is",
   "version": "2.0.0",
-  "main": "lib/bot.js",
+  "main": "lib/index.js",
   "author": "Lee Machin <me@mrl.ee>",
   "license": "MIT",
   "files": [

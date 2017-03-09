@@ -10,7 +10,7 @@
   "scripts": {
     "build": "babel src -d lib",
     "create": "claudia create --profile claudia --api-module lib/bot",
-    "update": "clauda update --profile claudia --version live",
+    "update": "claudia update --profile claudia --version live",
     "test": "mocha --compilers js:babel-core/register"
   },
   "dependencies": {

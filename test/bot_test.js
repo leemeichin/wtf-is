@@ -46,8 +46,8 @@ describe('Validating a metadata file against the schema', () => {
 })
 
 describe('Creating a new metadata file from the reference', () => {
-  it('should return the reference file so the user can copy it', () => {
-
+  it('should create a file and open it up a PR on github', () => {
+    // not exactly sure how to do this one yet!
   })
 })
 

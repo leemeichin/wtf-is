@@ -55,5 +55,5 @@ const schema = {
 
 export default function validate (metadata) {
   const ajv = new Ajv({allErrors: true})
-  return ajv.validate(schema, metadata) || ajv.errors
+  return !!ajv.validate(schema, metadata) || ajv.errors
 }

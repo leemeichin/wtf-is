@@ -1,26 +1,47 @@
+import cmd, {validate, create} from '../src/cmd'
 import {WtfIs} from '../src/bot'
+
+
+import yaml from 'js-yaml'
 import context from 'aws-lambda-mock-context'
 import sinon from 'sinon'
 import chai, {assert} from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import {readFileSync} from 'fs'
+import {resolve} from 'path'
 
 chai.use(chaiAsPromised)
 
 const schema = readFileSync(`${__dirname}/../metadata.reference.yml`)
 
-function fixture (name) {
-  const json = path.resolve(__dirname, name + '.json')
-  return JSON.parse(readFileSync(json))
+function fixture (name, kind) {
+  const file = readFileSync(resolve(__dirname, 'fixtures', `${name}.${kind}`))
+
+  if (kind === 'yml') {
+    return yaml.safeLoad(file)
+  } else {
+    return JSON.parse(file)
+  }
 }
 
 describe('Validating a metadata file against the schema', () => {
   it('should explain the errors when the file does not match the spec', () => {
+    const invalidMeta = fixture('invalid_metadata', 'yml')
+    const errors = validate(invalidMeta)
 
+    const messages = [
+      `should have required property 'deploy_url'`,
+      `should have required property 'ci_url'`,
+      `should match format "uri"`,
+      `should have required property 'team'`
+    ]
+
+    assert.deepEqual(errors.map(err => err.message), messages)
   })
 
   it('should report that the file is all good when there are no errors', () => {
-
+    const validMeta = fixture('valid_metadata', 'yml')
+    assert.isOk(validate(validMeta))
   })
 })
 

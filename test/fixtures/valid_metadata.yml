@@ -1,0 +1,16 @@
+name: 'Valid Metadata'
+description: 'I should be totally valid!'
+service_url: 'https://example.com'
+deploy_url: 'https://quay.io'
+ci_url: 'https://travis-ci.com'
+
+team:
+  name: 'Awesome'
+  slack_channel: '#awesome'
+
+docs:
+  - { title: 'Something', url: 'https://something.com' }
+  - { url: 'https://example.com' }
+
+dependencies:
+  - { name: 'React', url: 'https://github.com/facebook/react' }

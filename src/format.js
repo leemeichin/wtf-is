@@ -9,6 +9,15 @@ export default class Format {
     return '\n--------\n'
   }
 
+
+  repoName () {
+    return `*${this.repo.name}*`
+  }
+
+  repoDescription () {
+    return `_${this.repo.description}_`
+  }
+
   name () {
     return `*${this.metadata.name || this.repo.name}*`
   }
@@ -35,7 +44,7 @@ export default class Format {
     const {ci_url, deploy_url} = this.metadata
 
     if (ci_url && deploy_url) {
-      return [`CI: ${ci_url}`, `Deploy: ${deploy_url}`].join('\n')
+      return [this.separator, `CI: ${ci_url}`, `Deploy: ${deploy_url}`].join('\n')
     }
   }
 
@@ -51,7 +60,7 @@ export default class Format {
         }
       })
 
-      return ['Docs:', ...links].join('\n')
+      return [this.separator, 'Docs:', ...links].join('\n')
     }
   }
 
@@ -60,7 +69,7 @@ export default class Format {
 
     if (deps) {
       const links = deps.map(dep => `<${dep.url}|${dep.name}>`)
-      return ['Dependencies:', ...links].join('\n')
+      return [this.separator, 'Dependencies:', ...links].join('\n')
     }
   }
 }

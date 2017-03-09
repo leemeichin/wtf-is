@@ -13,14 +13,14 @@
     "build": "babel src -d lib && babel index.js > _index.js",
     "create": "yarn build && claudia create --profile claudia --api-module _index",
     "update": "yarn build && claudia update --profile claudia",
-    "test": "VCR_MODE=cache mocha --compilers js:babel-core/register"
+    "test": "mocha --compilers js:babel-core/register"
   },
   "dependencies": {
     "ajv": "^4.11.3",
     "aws-sdk": "^2.6.14",
     "babel-polyfill": "^6.23.0",
     "claudia-bot-builder": "^2.4.0",
-    "github": "^6.0.1",
+    "github": "^9.1.0",
     "js-yaml": "^3.8.1",
     "mz": "^2.6.0"
   },

@@ -1,30 +1,28 @@
 import 'babel-polyfill'
+import {slackTemplate} from 'claudia-bot-builder'
 import GithubApi from 'github'
 import yaml from 'js-yaml'
 import Format from './format'
 import cmd, {validate, create} from './cmd'
 
 export default class Bot {
-  constructor (slackTemplate) {
+  constructor () {
     this.gh = new GithubApi({
       protocol: 'https',
       host: 'api.github.com',
       headers: {
         'user-agent': 'leemachin/wtf-is (slack)'
-      },
-      debug: process.env.DEBUG
+      }
     })
 
-    this.SlackTemplate = slackTemplate
     this.org = process.env.GITHUB_ORG
     this.token = process.env.GITHUB_TOKEN
     this.slackBot = this.slackBot.bind(this)
 
+    this.gh.authenticate({type: 'token', token: this.token})
   }
 
-  async slackBot (req, ctx) {
-    this.gh.authenticate({type: 'token', token: this.token})
-
+  async slackBot (req) {
     const repo = req.text.split('/')
 
     this.repo = repo[0]
@@ -39,7 +37,7 @@ export default class Bot {
       this.repoInfo = await this.getRepoInfo()
     } catch (err) {
       if (err.code == 404) {
-        return this.hiddenMessage("Woops, that repo doesn't exist!")
+        return this.hiddenMessage("Woops, that repo doesn't exist!").get()
       } else {
         return err.message
       }
@@ -138,10 +136,10 @@ export default class Bot {
   }
 
   channelMessage(text) {
-    return new this.SlackTemplate(text).channelMessage(true)
+    return new slackTemplate(text).channelMessage(true)
   }
 
   hiddenMessage(text) {
-    return new this.SlackTemplate(text).channelMessage(false)
+    return new slackTemplate(text).channelMessage(false)
   }
 }

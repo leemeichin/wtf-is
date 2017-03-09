@@ -13,7 +13,7 @@
     "build": "babel src -d lib && babel index.js > _index.js",
     "create": "yarn build && claudia create --profile claudia --api-module _index",
     "update": "yarn build && claudia update --profile claudia",
-    "test": "mocha --compilers js:babel-core/register"
+    "test": "VCR_MODE=cache mocha --compilers js:babel-core/register"
   },
   "dependencies": {
     "ajv": "^4.11.3",

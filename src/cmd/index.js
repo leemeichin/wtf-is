@@ -5,9 +5,9 @@ export {validate, create}
 
 export default {
   mustValidate (txt) {
-    return /--validate/.test(txt)
+    return /\[validate\]$/.test(txt)
   },
   mustCreate (txt) {
-    return /--create/.test(txt)
+    return /\[create\]$/.test(txt)
   }
 }

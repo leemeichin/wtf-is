@@ -18,11 +18,11 @@ export default class WtfIs {
     this.token = process.env.GITHUB_TOKEN
     this.slackBot = this.slackBot.bind(this)
 
-    this.gh.authenticate({type: 'token', token: this.token})
-
   }
 
   async slackBot (req, ctx) {
+    this.gh.authenticate({type: 'token', token: this.token})
+
     const repo = res.text.split('/')
 
     let name = repo[0]

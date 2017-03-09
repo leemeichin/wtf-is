@@ -1,0 +1,11 @@
+{
+  "lambda": {
+    "role": "wtf-is-executor",
+    "name": "wtf-is",
+    "region": "us-east-1"
+  },
+  "api": {
+    "id": "g7r614z14f",
+    "module": "_index"
+  }
+}

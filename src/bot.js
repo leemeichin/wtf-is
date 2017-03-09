@@ -35,19 +35,35 @@ export class WtfIs {
 
     gh.authenticate({type: 'token', token: this.token})
 
-    if (cmd.mustCreate(req.text)) {
-      return create(gh)
-    }
-
     try {
+      if (cmd.mustCreate(req.text)) {
+        const prUrl = await create(gh, owner, name)
+        return this.channelMessage(`Metadata file has just been created! Checkout ${prUrl} :heart:`).get()
+      }
+
       const repo = await getRepoInfo
       const metadata = await getRepoMetadata(owner, name)
+
       if (cmd.mustValidate(req.text)) {
-        return validate(metadata)
+        const validation = validate(metadata)
+
+        if (validation === true) {
+          return this.hiddenMessage('Your metadata file looks great to me!').get()
+        } else {
+          let msg = [
+            'Oops, we found some errors in your yaml file :(',
+            "Fix these and you're good to go:"
+          ]
+
+          msg.concat(validation.map(err => err.message))
+
+          return this.hiddenMessage(msg.join('\n')).get()
+        }
+
       }
 
       const msg = this.buildMessage(repo, metadata)
-      return new SlackTemplate(msg).channelMessage(true).get()
+      return this.channelMessage(msg).get()
 
     } catch (err) {
       return err.message
@@ -86,6 +102,14 @@ export class WtfIs {
 
   async _repoInfo () {
     return gh.repos.get({repo, name})
+  }
+
+  channelMessage(text) {
+    return new SlackTemplate(text).channelMessage(true)
+  }
+
+  hiddenMessage(text) {
+    return new SlackTemplate(text).channelMessage(false)
   }
 }
 

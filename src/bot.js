@@ -33,31 +33,17 @@ export default class Bot {
       owner = repo[0]
       name = repo[1]
     }
+
     try {
       if (cmd.mustCreate(req.text)) {
-        const prUrl = await create(this.gh, owner, name)
-        return this.channelMessage(`Metadata file has just been created! Checkout ${prUrl} :heart:`).get()
+        return this.performCreation(owner, name)
       }
 
       const repo = await getRepoInfo
       const metadata = await getRepoMetadata(owner, name)
 
       if (cmd.mustValidate(req.text)) {
-        const validation = validate(metadata)
-
-        if (validation === true) {
-          return this.hiddenMessage('Your metadata file looks great to me!').get()
-        } else {
-          let msg = [
-            'Oops, we found some errors in your yaml file :(',
-            "Fix these and you're good to go:"
-          ]
-
-          msg.concat(validation.map(err => err.message))
-
-          return this.hiddenMessage(msg.join('\n')).get()
-        }
-
+        return this.performValidation(metadata)
       }
 
       const msg = this.buildMessage(repo, metadata)
@@ -100,6 +86,28 @@ export default class Bot {
 
   async _repoInfo () {
     return this.gh.repos.get({repo, name})
+  }
+
+  performValidation () {
+    const validation = validate(metadata)
+
+    if (validation === true) {
+      return this.hiddenMessage('Your metadata file looks great to me!').get()
+    } else {
+      let msg = [
+        'Oops, we found some errors in your yaml file :(',
+        "Fix these and you're good to go:"
+      ]
+
+      msg.concat(validation.map(err => err.message))
+
+      return this.hiddenMessage(msg.join('\n')).get()
+    }
+  }
+
+  async performCreation () {
+    const prUrl = await create(this.gh, owner, name)
+    return this.channelMessage(`Metadata file has just been created! Checkout ${prUrl} :heart:`).get()
   }
 
   channelMessage(text) {

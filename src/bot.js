@@ -11,7 +11,8 @@ export default class Bot {
       host: 'api.github.com',
       headers: {
         'user-agent': 'leemachin/wtf-is (slack)'
-      }
+      },
+      debug: true
     })
 
     this.SlackTemplate = slackTemplate
@@ -35,9 +36,9 @@ export default class Bot {
     }
 
     try {
-      this.repoInfo = await this.repoInfo()
+      this.repoInfo = await this.getRepoInfo()
     } catch (err) {
-      if (err.response.statusCode == 404) {
+      if (err.code == 404) {
         return this.hiddenMessage("Woops, that repo doesn't exist!")
       } else {
         return err.message
@@ -45,9 +46,9 @@ export default class Bot {
     }
 
     try {
-      this.metadata = await this.repoMetadata()
+      this.metadata = await this.getRepoMetadata()
     } catch (err) {
-      if (err.response.statusCode == 404) {
+      if (err.code == 404) {
         const msg = this.buildBasicMessage()
         return this.channelMessage(msg).get()
       } else {
@@ -80,11 +81,8 @@ export default class Bot {
       formatter.description(),
       formatter.siteUrls(),
       formatter.team(),
-      formatter.separator,
       formatter.deployment(),
-      formatter.separator,
       formatter.docs(),
-      formatter.separator,
       formatter.deps()
     ].filter(line => line).join('\n')
   }
@@ -93,12 +91,12 @@ export default class Bot {
     const formatter = new Format(this.repoInfo)
 
     return [
-      formatter.name(),
-      formatter.description()
-    ],join('\n')
+      formatter.repoName(),
+      formatter.repoDescription()
+    ].join('\n')
   }
 
-  async repoMetadata () {
+  async getRepoMetadata () {
     let metadata = await this.gh.repos.getContent({
       owner: this.owner,
       repo: this.repo,
@@ -111,7 +109,7 @@ export default class Bot {
     return yaml.safeLoad(metadata.data)
   }
 
-  async repoInfo () {
+  async getRepoInfo () {
     return this.gh.repos.get({owner: this.owner, repo: this.repo})
   }
 

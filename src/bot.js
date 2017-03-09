@@ -110,7 +110,8 @@ export default class Bot {
   }
 
   async getRepoInfo () {
-    return this.gh.repos.get({owner: this.owner, repo: this.repo})
+    const repoInfo = this.gh.repos.get({owner: this.owner, repo: this.repo})
+    return repoInfo.data
   }
 
   performValidation (metadata) {

@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 import GithubApi from 'github'
 import yaml from 'js-yaml'
 import Format from './format'

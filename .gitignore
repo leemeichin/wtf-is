@@ -3,3 +3,5 @@ node_modules/
 lib/
 .env
 _index.js
+test/fixtures/vcr_cassettes/
+test/fixtures/vcr_cassettes/

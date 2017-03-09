@@ -1,8 +1,8 @@
 import cmd, {validate, create} from '../src/cmd'
-import WtfIs from '../src/wtfis'
+import Bot from '../src/bot'
 
 import yaml from 'js-yaml'
-import context from 'aws-lambda-mock-context'
+import sepia from 'sepia'
 import sinon from 'sinon'
 import chai, {assert} from 'chai'
 import chaiAsPromised from 'chai-as-promised'
@@ -10,6 +10,13 @@ import {readFileSync} from 'fs'
 import {resolve} from 'path'
 
 chai.use(chaiAsPromised)
+
+sepia.configure({
+  includeHeaderNames: false,
+  includeCookieNames: false
+})
+
+const bot = new Bot()
 
 const schema = readFileSync(`${__dirname}/../metadata.reference.yml`)
 
@@ -46,7 +53,7 @@ describe('Validating a metadata file against the schema', () => {
 
 describe('Creating a new metadata file from the reference', () => {
   it('should create a file and open it up a PR on github', () => {
-    // not exactly sure how to do this one yet!
+    const prUrl = create(bot.gh, 'leemachin', 'wtf-is')
   })
 })
 

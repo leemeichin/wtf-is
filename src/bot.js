@@ -4,7 +4,7 @@ import yaml from 'js-yaml'
 import Format from './format'
 import cmd, {validate, create} from './cmd'
 
-export default class WtfIs {
+export default class Bot {
   constructor (slackTemplate) {
     this.gh = new GithubApi({
       protocol: 'https',

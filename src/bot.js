@@ -26,36 +26,54 @@ export default class Bot {
 
     const repo = req.text.split('/')
 
-    let name = repo[0]
-    let owner = this.org
+    this.repo = repo[0]
+    this.owner = this.org
 
     if (repo.length === 2) {
-      owner = repo[0]
-      name = repo[1]
+      this.owner = repo[0]
+      this.repo = repo[1]
     }
 
     try {
+      this.repoInfo = await this.repoInfo()
+    } catch (err) {
+      if (err.response.statusCode == 404) {
+        return this.hiddenMessage("Woops, that repo doesn't exist!")
+      } else {
+        return err.message
+      }
+    }
+
+    try {
+      this.metadata = await this.repoMetadata()
+    } catch (err) {
+      if (err.response.statusCode == 404) {
+        const msg = this.buildBasicMessage()
+        return this.channelMessage(msg).get()
+      } else {
+        return err.message
+      }
+    }
+
+    if (cmd.mustValidate(req.text)) {
+      return this.performValidation()
+    }
+
+
+    try {
       if (cmd.mustCreate(req.text)) {
-        return this.performCreation(owner, name)
+        return this.performCreation()
       }
-
-      const repoInfo = await this.repoInfo()
-      const metadata = await this.repoMetadata(owner, name)
-
-      if (cmd.mustValidate(req.text)) {
-        return this.performValidation(metadata)
-      }
-
-      const msg = this.buildMessage(repoInfo, metadata)
-      return this.channelMessage(msg).get()
-
     } catch (err) {
       return err.message
     }
+
+    const msg = this.buildMessage()
+    return this.channelMessage(msg).get()
   }
 
-  buildMessage (repo, metadata) {
-    const formatter = new Format(repo, metadata)
+  buildMessage () {
+    const formatter = new Format(this.repoInfo, this.metadata)
 
     return [
       formatter.name(),
@@ -68,14 +86,23 @@ export default class Bot {
       formatter.docs(),
       formatter.separator,
       formatter.deps()
-    ].compact().join('\n')
+    ].filter(line => line).join('\n')
   }
 
-  async repoMetadata (owner, name) {
+  buildBasicMessage () {
+    const formatter = new Format(this.repoInfo)
+
+    return [
+      formatter.name(),
+      formatter.description()
+    ],join('\n')
+  }
+
+  async repoMetadata () {
     let metadata = await this.gh.repos.getContent({
-      owner,
-      repo,
-      path: `.${owner}.yml`,
+      owner: this.owner,
+      repo: this.repo,
+      path: `.${this.owner}.yml`,
       headers: {
         Accept: 'application/vnd.github.v3.raw'
       }
@@ -85,7 +112,7 @@ export default class Bot {
   }
 
   async repoInfo () {
-    return this.gh.repos.get({repo, name})
+    return this.gh.repos.get({owner: this.owner, repo: this.repo})
   }
 
   performValidation (metadata) {
@@ -105,8 +132,8 @@ export default class Bot {
     }
   }
 
-  async performCreation (owner, name) {
-    const prUrl = await create(this.gh, owner, name)
+  async performCreation () {
+    const prUrl = await create(this.gh, this.owner, this.name)
     return this.channelMessage(`Metadata file has just been created! Checkout ${prUrl} :heart:`).get()
   }
 

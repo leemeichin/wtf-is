@@ -40,7 +40,7 @@ export default class Format {
   }
 
   docs () {
-    const {docs} = this.metadata.docs
+    const {docs} = this.metadata
 
     if (docs) {
       const links = docs.map(doc => {

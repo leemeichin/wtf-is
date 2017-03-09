@@ -54,11 +54,15 @@ describe('Validating a metadata file against the schema', () => {
 })
 
 describe('Creating a new metadata file from the reference', () => {
-  xit('should create a file and open it up a PR on github', async (done) => {
+  it('should create an attachment with the metadata and a github link', async () => {
     try {
-      const prUrl = await create(bot.gh, 'leemachin', 'wtf-is')
-    } catch (e) {
-      console.log(e)
+      const {text, attachments} = await bot.slackBot({text: 'leemachin/ask_awesomely [create]'})
+
+      assert.match(text, /https:\/\/github.com\/leemachin\/ask_awesomely\/master\/new\?filename=\.leemachin\.yml/)
+
+      assert(attachments.length > 1)
+    } catch (err) {
+      return err
     }
   })
 })

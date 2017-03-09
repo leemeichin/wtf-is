@@ -44,6 +44,29 @@ export default class Bot {
       }
     }
 
+    if (cmd.mustValidate(flag)) {
+      return this.performValidation()
+    }
+
+    if (cmd.mustCreate(flag)) {
+      try {
+        const attachment = this.performCreation()
+
+        const msg = [
+          'Wow, nice one! Add this file to your repo, tweak it, and off you go!',
+          `<Open the file editor|https://github.com/${this.owner}/${this.repo}/new/master?filename=.${this.owner}.yml>`
+        ].join('\n')
+
+        return this.hiddenMessage(msg)
+          .addAttachment()
+          .addTitle(`.${this.owner}.yml`)
+          .addText(attachment)
+          .get()
+      } catch (err) {
+        return err.message
+      }
+    }
+
     try {
       this.metadata = await this.getRepoMetadata()
     } catch (err) {
@@ -53,19 +76,6 @@ export default class Bot {
       } else {
         return err.message
       }
-    }
-
-    if (cmd.mustValidate(flag)) {
-      return this.performValidation()
-    }
-
-
-    try {
-      if (cmd.mustCreate(flag)) {
-        return this.performCreation()
-      }
-    } catch (err) {
-      return err.message
     }
 
     const msg = this.buildMessage()

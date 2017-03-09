@@ -12,7 +12,7 @@ export default class Bot {
       headers: {
         'user-agent': 'leemachin/wtf-is (slack)'
       },
-      debug: true
+      debug: process.env.DEBUG
     })
 
     this.SlackTemplate = slackTemplate
@@ -37,7 +37,6 @@ export default class Bot {
 
     try {
       this.repoInfo = await this.getRepoInfo()
-      console.log(this.repoInfo)
     } catch (err) {
       if (err.code == 404) {
         return this.hiddenMessage("Woops, that repo doesn't exist!")
@@ -50,7 +49,6 @@ export default class Bot {
       this.metadata = await this.getRepoMetadata()
     } catch (err) {
       if (err.code == 404) {
-        console.log(this.repoInfo)
         const msg = this.buildBasicMessage()
         return this.channelMessage(msg).get()
       } else {

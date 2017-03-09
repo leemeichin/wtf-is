@@ -23,7 +23,8 @@ export default class Bot {
   }
 
   async slackBot (req) {
-    const repo = req.text.split('/')
+    let [repo, flag] = req.text.split(' ')
+    repo = repo.split('/')
 
     this.repo = repo[0]
     this.owner = this.org
@@ -54,13 +55,13 @@ export default class Bot {
       }
     }
 
-    if (cmd.mustValidate(req.text)) {
+    if (cmd.mustValidate(flag)) {
       return this.performValidation()
     }
 
 
     try {
-      if (cmd.mustCreate(req.text)) {
+      if (cmd.mustCreate(flag)) {
         return this.performCreation()
       }
     } catch (err) {

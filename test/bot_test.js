@@ -1,6 +1,5 @@
 import cmd, {validate, create} from '../src/cmd'
-import {WtfIs} from '../src/bot'
-
+import WtfIs from '../src/wtfis'
 
 import yaml from 'js-yaml'
 import context from 'aws-lambda-mock-context'

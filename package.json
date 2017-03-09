@@ -5,12 +5,13 @@
   "author": "Lee Machin <me@mrl.ee>",
   "license": "MIT",
   "files": [
-    "lib/"
+    "lib/",
+    "metadata.reference.yml"
   ],
   "scripts": {
     "build": "babel src -d lib",
     "create": "claudia create --profile claudia --api-module lib/bot",
-    "update": "claudia update --profile claudia --version live",
+    "update": "yarn build && claudia update --profile claudia --version live",
     "test": "mocha --compilers js:babel-core/register"
   },
   "dependencies": {

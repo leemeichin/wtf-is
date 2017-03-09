@@ -1,4 +1,5 @@
 node_modules/
 .aws/
-.env
 lib/
+.env
+_index.js

@@ -1,7 +1,7 @@
 import botBuilder from 'claudia-bot-builder'
-import WtfIs from './wtfis'
+import Bot from './bot'
 
 
 const slackTemplate = botBuilder.slackTemplate
 
-module.exports = botBuilder(new WtfIs(slackTemplate).slackBot)
+module.exports = botBuilder(new Bot(slackTemplate).slackBot)

@@ -10,8 +10,9 @@
   ],
   "scripts": {
     "build": "babel src -d lib",
-    "create": "claudia create --profile claudia --api-module lib/bot",
-    "update": "yarn build && claudia update --profile claudia --version live",
+    "prepublish": "mv lib/* ./"
+    "create": "yarn build && claudia create --profile claudia --api-module lib/index",
+    "update": "yarn build && claudia update --profile claudia",
     "test": "VCR_MODE=cache mocha --compilers js:babel-core/register"
   },
   "dependencies": {

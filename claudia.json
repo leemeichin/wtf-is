@@ -6,6 +6,6 @@
   },
   "api": {
     "id": "raxyggo1e4",
-    "module": "lib/bot"
+    "module": "lib/index"
   }
 }

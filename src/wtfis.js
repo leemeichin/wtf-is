@@ -3,10 +3,8 @@ import yaml from 'js-yaml'
 import Format from './format'
 import cmd, {validate, create} from './cmd'
 
-const SlackTemplate = botBuilder.slackTemplate
-
 export default class WtfIs {
-  constructor () {
+  constructor (slackTemplate) {
     this.gh = new GithubApi({
       protocol: 'https',
       host: 'api.github.com',
@@ -15,9 +13,13 @@ export default class WtfIs {
       }
     })
 
+    this.SlackTemplate = slackTemplate
     this.org = process.env.GITHUB_ORG
     this.token = process.env.GITHUB_TOKEN
     this.slackBot = this.slackBot.bind(this)
+
+    this.gh.authenticate({type: 'token', token: this.token})
+
   }
 
   async slackBot (req, ctx) {
@@ -30,12 +32,9 @@ export default class WtfIs {
       owner = repo[0]
       name = repo[1]
     }
-
-    gh.authenticate({type: 'token', token: this.token})
-
     try {
       if (cmd.mustCreate(req.text)) {
-        const prUrl = await create(gh, owner, name)
+        const prUrl = await create(this.gh, owner, name)
         return this.channelMessage(`Metadata file has just been created! Checkout ${prUrl} :heart:`).get()
       }
 
@@ -86,7 +85,7 @@ export default class WtfIs {
   }
 
   async _repoMetadata () {
-    let metadata = await gh.repos.getContent({
+    let metadata = await this.gh.repos.getContent({
       owner,
       repo,
       path: `.${owner}.yml`,
@@ -99,14 +98,14 @@ export default class WtfIs {
   }
 
   async _repoInfo () {
-    return gh.repos.get({repo, name})
+    return this.gh.repos.get({repo, name})
   }
 
   channelMessage(text) {
-    return new SlackTemplate(text).channelMessage(true)
+    return new this.SlackTemplate(text).channelMessage(true)
   }
 
   hiddenMessage(text) {
-    return new SlackTemplate(text).channelMessage(false)
+    return new this.SlackTemplate(text).channelMessage(false)
   }
 }

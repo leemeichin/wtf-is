@@ -39,14 +39,14 @@ export default class Bot {
         return this.performCreation(owner, name)
       }
 
-      const repo = await this.repoInfo()
+      const repoInfo = await this.repoInfo()
       const metadata = await this.repoMetadata(owner, name)
 
       if (cmd.mustValidate(req.text)) {
         return this.performValidation(metadata)
       }
 
-      const msg = this.buildMessage(repo, metadata)
+      const msg = this.buildMessage(repoInfo, metadata)
       return this.channelMessage(msg).get()
 
     } catch (err) {
@@ -88,7 +88,7 @@ export default class Bot {
     return this.gh.repos.get({repo, name})
   }
 
-  performValidation () {
+  performValidation (metadata) {
     const validation = validate(metadata)
 
     if (validation === true) {
@@ -105,7 +105,7 @@ export default class Bot {
     }
   }
 
-  async performCreation () {
+  async performCreation (owner, name) {
     const prUrl = await create(this.gh, owner, name)
     return this.channelMessage(`Metadata file has just been created! Checkout ${prUrl} :heart:`).get()
   }

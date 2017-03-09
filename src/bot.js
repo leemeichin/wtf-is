@@ -3,7 +3,7 @@ import {slackTemplate} from 'claudia-bot-builder'
 import GithubApi from 'github'
 import yaml from 'js-yaml'
 import Format from './format'
-import cmd, {validate, create} from './cmd'
+import cmd, {validate, create as createMetadataAttachment} from './cmd'
 
 export default class Bot {
   constructor () {
@@ -50,11 +50,11 @@ export default class Bot {
 
     if (cmd.mustCreate(flag)) {
       try {
-        const attachment = this.performCreation()
+        const attachment = await createMetadataAttachment()
 
         const msg = [
           'Wow, nice one! Add this file to your repo, tweak it, and off you go!',
-          `<Open the file editor|https://github.com/${this.owner}/${this.repo}/new/master?filename=.${this.owner}.yml>`
+          `<https://github.com/${this.owner}/${this.repo}/new/master?filename=.${this.owner}.yml|Open this file in GitHub!>`
         ].join('\n')
 
         return this.hiddenMessage(msg)
@@ -139,11 +139,6 @@ export default class Bot {
 
       return this.hiddenMessage(msg.join('\n')).get()
     }
-  }
-
-  async performCreation () {
-    const prUrl = await create(this.gh, this.owner, this.name)
-    return this.channelMessage(`Metadata file has just been created! Checkout ${prUrl} :heart:`).get()
   }
 
   channelMessage(text) {

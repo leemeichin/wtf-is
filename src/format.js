@@ -39,7 +39,7 @@ export default class Format {
   team () {
     const {name, slack_channel} = this.metadata.team
 
-    return `Team: ${name} (#${slack_channel}) :yeah:`
+    return `Team: ${name} (${slack_channel}) :yeah:`
   }
 
   deployment () {

@@ -1,0 +1,36 @@
+{
+  "statusCode": 404,
+  "headers": {
+    "server": "GitHub.com",
+    "date": "Thu, 09 Mar 2017 15:06:07 GMT",
+    "content-type": "application/json; charset=utf-8",
+    "content-length": "77",
+    "status": "404 Not Found",
+    "x-ratelimit-limit": "5000",
+    "x-ratelimit-remaining": "4979",
+    "x-ratelimit-reset": "1489074628",
+    "x-oauth-scopes": "repo",
+    "x-accepted-oauth-scopes": "",
+    "x-github-media-type": "github.v3; param=raw",
+    "access-control-expose-headers": "ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval",
+    "access-control-allow-origin": "*",
+    "content-security-policy": "default-src 'none'",
+    "strict-transport-security": "max-age=31536000; includeSubdomains; preload",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "deny",
+    "x-xss-protection": "1; mode=block",
+    "x-github-request-id": "33DE:DCFF:495F071:5E30A82:58C16F5F"
+  },
+  "url": "https://api.github.com:443/repos/leemachin/ask_awesomely/contents/.leemachin.yml",
+  "time": 543,
+  "request": {
+    "method": "get",
+    "headers": {
+      "host": "api.github.com",
+      "content-length": "0",
+      "Authorization": "token 030ce59b5018bb2b8fb12c4b84e55a5fc7cd0cfa",
+      "accept": "application/vnd.github.v3.raw",
+      "user-agent": "leemachin/wtf-is (slack)"
+    }
+  }
+}

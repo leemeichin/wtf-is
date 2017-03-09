@@ -16,6 +16,8 @@ sepia.configure({
   includeCookieNames: false
 })
 
+sepia.fixtureDir(resolve(__dirname, 'fixtures/vcr_cassettes'))
+
 const bot = new Bot()
 
 const schema = readFileSync(`${__dirname}/../metadata.reference.yml`)
@@ -52,37 +54,35 @@ describe('Validating a metadata file against the schema', () => {
 })
 
 describe('Creating a new metadata file from the reference', () => {
-  it('should create a file and open it up a PR on github', () => {
-    const prUrl = create(bot.gh, 'leemachin', 'wtf-is')
+  xit('should create a file and open it up a PR on github', async (done) => {
+    try {
+      const prUrl = await create(bot.gh, 'leemachin', 'wtf-is')
+    } catch (e) {
+      console.log(e)
+    }
   })
 })
 
 describe('Describing a github repo with no metadata yaml', () => {
-  it('should just show the name of the repo, the description, and its URL', () => {
+  it('should just show the name of the repo, the description, and its URL', async () => {
+    try {
+      const {text} = await bot.slackBot({text: 'leemachin/ask_awesomely'})
 
+      assert.match(text, /ask_awesomely/)
+      assert.match(text, /https:\/\/github.com\/leemachin\/ask_awesomely/)
+      assert.match(text, /Build Typeforms awesomely\. In Ruby\./)
+    } catch (err) {
+      return err
+    }
   })
 })
 
 describe('Describing a github repo with a metadata yaml', () => {
-  it('shows the name and description', () => {
-
-  })
-
-  it('shows a link to the service', () => {
-
-  })
-
-  it('shows links to dependent services', () => {
-
-  })
-
-  describe('showing the documentation links', () => {
-    it('shows pretty URLs for slack when there is a title', () => {
-
-    })
-
-    it('shows a raw URL when there is no title', () => {
-
-    })
+  xit('shows all the extra data from the yaml file', async () => {
+    try {
+      const {text} = await bot.slackBot({text: 'leemachin/wtf-is'})
+    } catch (err) {
+      return err
+    }
   })
 })

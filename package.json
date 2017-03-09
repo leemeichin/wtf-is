@@ -6,12 +6,12 @@
   "license": "MIT",
   "files": [
     "lib/",
-    "metadata.reference.yml"
+    "metadata.reference.yml",
+    "_index.js"
   ],
   "scripts": {
-    "build": "babel src -d lib",
-    "prepublish": "mv lib/* ./"
-    "create": "yarn build && claudia create --profile claudia --api-module lib/index",
+    "build": "babel src -d lib && babel index.js > _index.js",
+    "create": "yarn build && claudia create --profile claudia --api-module _index",
     "update": "yarn build && claudia update --profile claudia",
     "test": "VCR_MODE=cache mocha --compilers js:babel-core/register"
   },

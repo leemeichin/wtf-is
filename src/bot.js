@@ -24,7 +24,7 @@ export default class Bot {
   async slackBot (req, ctx) {
     this.gh.authenticate({type: 'token', token: this.token})
 
-    const repo = res.text.split('/')
+    const repo = req.text.split('/')
 
     let name = repo[0]
     let owner = this.org

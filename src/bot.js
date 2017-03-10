@@ -60,7 +60,7 @@ export default class Bot {
         return this.hiddenMessage(msg)
           .addAttachment()
           .addTitle(`.${this.owner}.yml`)
-          .addText(attachment)
+          .addText('```\n' + attachment + '\n```')
           .get()
       } catch (err) {
         return err.message
